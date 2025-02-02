@@ -5,7 +5,7 @@
 typedef int E;
 
 
-typedef struct tree//Ê÷ 
+typedef struct tree//æ ‘ 
 {
 	E element;
 	struct tree* left;
@@ -13,7 +13,7 @@ typedef struct tree//Ê÷
 }treenode;
 
 
-treenode* createTnode(E element)//´´½¨½Úµã
+treenode* createTnode(E element)//åˆ›å»ºèŠ‚ç‚¹
 {
 	treenode*  Node= malloc(sizeof(treenode));
 	Node->element = element;
@@ -22,7 +22,7 @@ treenode* createTnode(E element)//´´½¨½Úµã
 }
 
 
-treenode* insert(treenode* root, E element)//²åÈë
+treenode* insert(treenode* root, E element)//æ’å…¥
 {
 	if (root)
 	{
@@ -37,13 +37,13 @@ treenode* insert(treenode* root, E element)//²åÈë
 	}
 	else
 	{
-		root = createTnode(element);//½áÊøµÝ¹é
+		root = createTnode(element);//ç»“æŸé€’å½’
 	}
 	return root;
 }
 
 
-void inOrder(treenode* root)//ÖÐ
+void inOrder(treenode* root)//ä¸­
 {
 	if (!root)return;
 	inOrder(root->left);
@@ -52,7 +52,7 @@ void inOrder(treenode* root)//ÖÐ
 }
 
 
-treenode* Find(treenode* root,E element)//ÕÒ½Úµã
+treenode* Find(treenode* root,E element)//æ‰¾èŠ‚ç‚¹
 {
 	if (!root)return 0;
 	if (element < root->element)
@@ -65,7 +65,7 @@ treenode* Find(treenode* root,E element)//ÕÒ½Úµã
 }
 
 
-treenode* Findmax(treenode* root)//ÕÒ×î´ó
+treenode* Findmax(treenode* root)//æ‰¾æœ€å¤§
 {
 	if (!root)return 0;
 	if (root->right != NULL)
@@ -75,30 +75,41 @@ treenode* Findmax(treenode* root)//ÕÒ×î´ó
 }
 
 
-treenode* delete(treenode* root, E target)//ÕÒµ½ÁË²ÅÓÐÈýÖÖÇé¿ö
+treenode* delete(treenode* root, E target)//æ‰¾åˆ°äº†æ‰æœ‰ä¸‰ç§æƒ…å†µ,æ¯æ¬¡é€’å½’è¿”å›žå­èŠ‚ç‚¹åœ°å€
 {
-	root = Find(root, target);//Ã»ÕÒµ½µÄ²»ÓÃ¹Ü
 	if (root == NULL)return 0;
-	if (root->right && root->left)
+	if (target < root->element)
 	{
-		root->element = Findmax(root->left)->element;
-		root->left=delete(root->left, root->element);//¸üÐÂ,½ÓÉÏ
+		root->left = delete(root->left, target);
+	}
+	else if (target > root->element)
+	{
+		root->right = delete(root->right, target);//é€’å½’æ—¶è®°å½•çˆ¶èŠ‚ç‚¹åœ°å€
 	}
 	else
-	{
-		treenode* tmp=root;
-		if (root->right)
+	{   //æ‰¾åˆ°äº†
+		if (root->right && root->left)
 		{
-			root = root->right;
+			root->element = Findmax(root->left)->element;
+			root->left=delete(root->left,root->element);
 		}
 		else
 		{
-			root = root->left;
+			treenode* tmp = root;
+			if (root->right)
+			{
+				root = root->right;
+			}
+			else
+			{
+				root = root->left;
+			}
+			free(tmp);
 		}
-		free(tmp);
 	}
 	return root;
 }
+
 
 
 	
